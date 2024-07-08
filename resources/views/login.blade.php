@@ -17,7 +17,7 @@
 
 
             {{-- <a href="{{ route('user') }}" class="bg-primary text-white px-5 py-2 rounded-full text-lg font-medium"><i
-                    class='bx bxs-pencil mr-2'></i>Lakukan Penilaian Alternatif</a> --}}
+                    class='bx bxs-pencil mr-2'></i>Lakukan Penilaian Alternatif ini</a> --}}
 
         </div>
         <div class="flex flex-1 flex-col items-start mt-8 md:mt-0 justify-center h-screen p-16 gap-5">
