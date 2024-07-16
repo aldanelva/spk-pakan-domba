@@ -54,6 +54,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/penilaian/generate-ranking', [PenilaianController::class, 'generateRanking'])->name('generateRanking');
 
     Route::get('/penilaian/user/manual', [PenilaianUserController::class, 'index'])->name('penilaian.user');
+    Route::get('/penilaian/user/manual/edit/{id}', [PenilaianUserController::class, 'edit'])->name('penilaian.user.edit');
     Route::post('/penilaian/user/store', [PenilaianUserController::class, 'store'])->name('penilaian.user.store');
     Route::post('/penilaian/user/destroy', [PenilaianUserController::class, 'destroy'])->name('penilaian.user.destroy');
     Route::get('/penilaian/user/user', [PenilaianUserController::class, 'user'])->name('user.user');

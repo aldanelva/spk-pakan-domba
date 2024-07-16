@@ -21,7 +21,7 @@ e                           x-col gap-1">
                                 PENILAIAN</p>
                             <p class="text-gray-400 max-w-2xl">&nbsp;</p>
                             <!-- <p class="text-gray-400 max-w-2xl">Pakan
-                                                Memilih pakan berkualitas berdasarkan kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik domba.</p> -->
+                                                    Memilih pakan berkualitas berdasarkan kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik domba.</p> -->
                             <div class="sm:flex items-center justify-start gap-2">
 
                                 <button onclick="toggleModal('modal-id')" type="button"
@@ -509,7 +509,7 @@ c                                       us:ring-offset-2  mt-4 sm:mt-0 inline-fl
         id="modal-id">
         <div class="relative w-auto my-6 mx-auto max-w-3xl">
             <!--
-                    c           ontent-->
+                        c           ontent-->
             <div
                 class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 <!--header-->
@@ -597,7 +597,7 @@ c                                       us:ring-offset-2  mt-4 sm:mt-0 inline-fl
             id="modal-id2">
             <div class="relative w-auto my-6 mx-auto max-w-3xl">
                 <!--
-                            c       ontent-->
+                                c       ontent-->
                 <div
                     class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                     <!--header-->

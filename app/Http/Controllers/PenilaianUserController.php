@@ -294,9 +294,9 @@ class PenilaianUserController extends Controller
     public function edit($id)
     {
         $penilaian = PenilaianUser::findOrFail($id);
+        $kriterias = Kriteria::all();
         $pakans = Pakan::all();
-        $kriterias = Kriteria::with('bobots')->get();
-        return view('moduls.dashboard.penilaian.manual', compact('penilaian', 'pakans', 'kriterias'));
+        return view('moduls.dashboard.penilaian.manual_edit', compact('penilaian', 'kriterias', 'pakans'));
     }
 
 
@@ -309,6 +309,9 @@ class PenilaianUserController extends Controller
 
         $penilaian->kode_alternatif = $request->input('kode_alternatif');
         $penilaian->jenis_pakan = $request->input('jenis_pakan');
+
+        $bobotArray = $request->input('kode_kriteria');
+        $penilaian->bobot = implode(', ', $bobotArray);
 
         $penilaian->save();
 

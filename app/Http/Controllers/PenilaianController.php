@@ -203,19 +203,26 @@ class PenilaianController extends Controller
         $selectedPenilaianIds = $request->input('selected_penilaians', []);
         $selectedPenilaianUserIds = $request->input('selected_penilaian_users', []);
         // $penilaians = [];
+        //untuk penilaian dari admin ambil dari tabel Penilaian
         $penilaian_admins = Penilaian::whereIn('id', $selectedPenilaianIds)->get();
+        //looping untuk menambahkan object baru
         $penilaian_admins = $penilaian_admins->map(function ($item) {
+            //ditambahkan object penilaian_from
             $item->penilaian_from = 'admin';
 
             return $item;
         });
+        //penilaian dari user ambil dari tabel penilaian user
         $penilaian_users = PenilaianUser::whereIn('id', $selectedPenilaianUserIds)->get();
+        //looping untuk menambahkan object baru
         $penilaian_users = $penilaian_users->map(function ($item) {
+            //tambahkan object penilaian_from
             $item->penilaian_from = 'user';
 
             return $item;
         });
 
+        //jadikan satu $penilaian_admins dengan $penilaian_users
         $penilaians = $penilaian_admins->merge($penilaian_users);
 
         if ($penilaians->count() > 1) {
@@ -289,7 +296,8 @@ class PenilaianController extends Controller
     {
         $penilaian = Penilaian::findOrFail($id);
         $kriterias = Kriteria::all();
-        return view('moduls.dashboard.penilaian_edit', compact('penilaian', 'kriterias'));
+        $pakans = Pakan::all();
+        return view('moduls.dashboard.penilaian_edit', compact('penilaian', 'kriterias', 'pakans'));
     }
 
     /**
@@ -298,8 +306,19 @@ class PenilaianController extends Controller
     public function update(Request $request, $id)
     {
         $penilaian = Penilaian::findOrFail($id);
-        $penilaian->kode_alternatif = $request->input('kode_alternatif');
-        $penilaian->jenis_pakan = $request->input('jenis_pakan');
+
+        //ambil data dari inputan kode_alternatif
+        $kode_alternatif = $request->input('kode_alternatif');
+        //pisahkan koma (,)
+        $kode_alternatif = explode(',', $kode_alternatif);
+
+        //ambil index 0 sbg kode_alternatif
+        $penilaian->kode_alternatif = $kode_alternatif[0];
+        //ambil index 1 sbg jenis_pakan
+        $penilaian->jenis_pakan = $kode_alternatif[1];
+
+        $bobotArray = $request->input('kode_kriteria');
+        $penilaian->bobot = implode(', ', $bobotArray);
 
         $penilaian->save();
 
