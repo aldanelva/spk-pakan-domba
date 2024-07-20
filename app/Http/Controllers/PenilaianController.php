@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 class PenilaianController extends Controller
 {
     protected $weightCriteria = [
+        // bobot kriteria
         0.4,
         0.2,
         0.05,
