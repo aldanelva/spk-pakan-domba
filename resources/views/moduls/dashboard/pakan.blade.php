@@ -16,12 +16,11 @@
                         <i class='bx bxs-bowl-rice text-5xl text-primary'></i>
                         <div class="flex flex-col gap-1">
                             <p tabindex="0"
-                                class="focus:outline-none text-base sm:text-lg md:text-2xl lg:text-3xl font-bold leading-normal text-gray-800 mt-2"
-                                style="color: red">
+                                class="focus:outline-none text-base sm:text-lg md:text-2xl lg:text-3xl font-bold leading-normal text-gray-800 mt-2">
                                 PAKAN</p>
                             <p class="text-gray-400 max-w-2xl">&nbsp;</p>
                             <!-- <p class="text-gray-400 max-w-2xl">Pakan
-                                                                                Memilih pakan berkualitas berdasarkan kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik domba.</p> -->
+                                                                                    Memilih pakan berkualitas berdasarkan kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik domba.</p> -->
                             <div class="sm:flex items-center justify-start gap-2">
                                 <button onclick="toggleModal('modal-id')" type="button"
                                     class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-1 bg-primary hover:bg-primary focus:outline-none rounded">
