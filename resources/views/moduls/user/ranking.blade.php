@@ -83,7 +83,14 @@ e                           x-col gap-1">
                                     <tr>
                                         <th>Ranking</th>
                                         <th>Jenis Pakan</th>
-                                        <th>Penilaian dari</th>
+                                        {{-- <th>Penilaian dari</th> --}}
+                                        <th>Serat (%)</th>
+                                        <th>Lemak (%)</th>
+                                        <th>Abu (%)</th>
+                                        <th>Protein (%)</th>
+                                        <th>Harga</th>
+                                        <th>Jarak</th>
+                                        <th>Ketersediaan</th>
                                         <th>Nilai</th>
                                     </tr>
                                 </thead>
@@ -101,10 +108,87 @@ e                           x-col gap-1">
                                                     @endif
                                                 @endforeach
                                             </td>
-                                            <td>
+                                            {{-- <td>
                                                 @foreach ($penilaians as $penilaian)
                                                     @if ($penilaian['kode_alternatif'] == $v)
                                                         {{ $penilaian['penilaian_from'] }}
+                                                    @endif
+                                                @endforeach
+                                            </td> --}}
+                                            <td>
+                                                @foreach ($penilaians as $penilaian)
+                                                    @if ($penilaian['kode_alternatif'] == $v)
+                                                        @if (isset($penilaian['pakan']->serat))
+                                                            {{ $penilaian['pakan']->serat }}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($penilaians as $penilaian)
+                                                    @if ($penilaian['kode_alternatif'] == $v)
+                                                        @if (isset($penilaian['pakan']->lemak))
+                                                            {{ $penilaian['pakan']->lemak }}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($penilaians as $penilaian)
+                                                    @if ($penilaian['kode_alternatif'] == $v)
+                                                        @if (isset($penilaian['pakan']->abu))
+                                                            {{ $penilaian['pakan']->abu }}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($penilaians as $penilaian)
+                                                    @if ($penilaian['kode_alternatif'] == $v)
+                                                        @if (isset($penilaian['pakan']->protein))
+                                                            {{ $penilaian['pakan']->protein }}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($penilaians as $penilaian)
+                                                    @if ($penilaian['kode_alternatif'] == $v)
+                                                        @if (isset($penilaian['pakan']->harga))
+                                                            {{ $penilaian['pakan']->harga }}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($penilaians as $penilaian)
+                                                    @if ($penilaian['kode_alternatif'] == $v)
+                                                        @if (isset($penilaian['pakan']->jarak))
+                                                            {{ $penilaian['pakan']->jarak }}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    @endif
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($penilaians as $penilaian)
+                                                    @if ($penilaian['kode_alternatif'] == $v)
+                                                        @if (isset($penilaian['pakan']->ketersediaan))
+                                                            {{ $penilaian['pakan']->ketersediaan }}
+                                                        @else
+                                                            -
+                                                        @endif
                                                     @endif
                                                 @endforeach
                                             </td>
@@ -122,7 +206,14 @@ e                           x-col gap-1">
                                     <tr>
                                         <th>Ranking</th>
                                         <th>Jenis Pakan</th>
-                                        <th>Penilaian dari</th>
+                                        {{-- <th>Penilaian dari</th> --}}
+                                        <th>Serat (%)</th>
+                                        <th>Lemak (%)</th>
+                                        <th>Abu (%)</th>
+                                        <th>Protein (%)</th>
+                                        <th>Harga</th>
+                                        <th>Jarak</th>
+                                        <th>Ketersediaan</th>
                                         <th>Nilai</th>
                                     </tr>
                                 </tfoot>

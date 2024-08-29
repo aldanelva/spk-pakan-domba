@@ -79,8 +79,14 @@ class PenilaianUserController extends Controller
 
         for ($j = 0; $j < count(current($weightedMatrix)); $j++) {
             $column = array_column($weightedMatrix, $j);
-            $idealPositive[$j] = max($column);
-            $idealNegative[$j] = min($column);
+
+            if ($criteriaTypes[$j] == 'Benefit') {
+                $idealPositive[$j] = max($column);
+                $idealNegative[$j] = min($column);
+            } elseif ($criteriaTypes[$j] == 'Cost') {
+                $idealPositive[$j] = min($column);
+                $idealNegative[$j] = max($column);
+            }
         }
 
         return [$idealPositive, $idealNegative];

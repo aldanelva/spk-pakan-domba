@@ -21,7 +21,7 @@ e                           x-col gap-1">
                                 PENILAIAN</p>
                             <p class="text-gray-400 max-w-2xl">&nbsp;</p>
                             <!-- <p class="text-gray-400 max-w-2xl">Pakan
-                                                    Memilih pakan berkualitas berdasarkan kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik domba.</p> -->
+                                                        Memilih pakan berkualitas berdasarkan kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik domba.</p> -->
                             <div class="sm:flex items-center justify-start gap-2">
 
                                 <button onclick="toggleModal('modal-id')" type="button"
@@ -461,7 +461,14 @@ c                                       us:ring-offset-2  mt-4 sm:mt-0 inline-fl
                                 <thead>
                                     <tr>
                                         <th>Ranking</th>
-                                        <th>Jenis Pakan</th>
+                                        <th>Alternatif Pakan</th>
+                                        <th>Serat</th>
+                                        <th>Lemak</th>
+                                        <th>Abu</th>
+                                        <th>Protein</th>
+                                        <th>Harga</th>
+                                        <th>Jarak</th>
+                                        <th>Ketersediaan</th>
                                         <th>Nilai</th>
                                     </tr>
                                 </thead>
@@ -469,30 +476,44 @@ c                                       us:ring-offset-2  mt-4 sm:mt-0 inline-fl
                                     @php
                                         $i = 1;
                                     @endphp
-
-                                    @foreach ($preferenceValues as $kode_alternatif => $value)
-                                        <tr class="data-consume">
-                                            <td>{{ $i }}</td>
-                                            <td>
-                                                @foreach ($penilaians as $penilaian)
-                                                    @if ($penilaian['kode_alternatif'] == $kode_alternatif)
-                                                        {{ $penilaian['jenis_pakan'] }}
-                                                    @endif
-                                                @endforeach
-                                            </td>
-                                            <td>{{ $value }}</td>
-
-
-                                        </tr>
+                                    @foreach ($rankAlternatives as $kode_alternatif => $value)
                                         @php
-                                            $i++;
+                                            $penilaian = $penilaian_for_kedekatan_relatif->firstWhere(
+                                                'kode_alternatif',
+                                                $kode_alternatif,
+                                            );
                                         @endphp
+                                        @if ($penilaian)
+                                            <tr class="data-consume">
+                                                <td>{{ $i }}</td>
+                                                <td>{{ $penilaian->jenis_pakan }}</td>
+                                                <td>{{ $penilaian->serat }}</td>
+                                                <td>{{ $penilaian->lemak }}</td>
+                                                <td>{{ $penilaian->abu }}</td>
+                                                <td>{{ $penilaian->protein }}</td>
+                                                <td>{{ $penilaian->harga }}</td>
+                                                <td>{{ $penilaian->jarak }}</td>
+                                                <td>{{ $penilaian->ketersediaan }}</td>
+                                                <td>{{ $value }}</td>
+                                            </tr>
+                                            @php
+                                                $i++;
+                                            @endphp
+                                        @endif
                                     @endforeach
+
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th>Ranking</th>
-                                        <th>Jenis Pakan</th>
+                                        <th>Alternatif Pakan</th>
+                                        <th>Serat</th>
+                                        <th>Lemak</th>
+                                        <th>Abu</th>
+                                        <th>Protein</th>
+                                        <th>Harga</th>
+                                        <th>Jarak</th>
+                                        <th>Ketersediaan</th>
                                         <th>Nilai</th>
                                     </tr>
                                 </tfoot>
@@ -509,7 +530,7 @@ c                                       us:ring-offset-2  mt-4 sm:mt-0 inline-fl
         id="modal-id">
         <div class="relative w-auto my-6 mx-auto max-w-3xl">
             <!--
-                        c           ontent-->
+                            c           ontent-->
             <div
                 class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 <!--header-->
@@ -542,7 +563,8 @@ c                                       us:ring-offset-2  mt-4 sm:mt-0 inline-fl
                                 class="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring w-full">
                                 @foreach ($pakans as $pakan)
                                     <option value="{{ $pakan->kode_alternatif }},{{ $pakan->jenis_pakan }}">
-                                        {{ $pakan->kode_alternatif }} - {{ $pakan->jenis_pakan }}</option>
+                                        {{ $pakan->kode_alternatif }} - {{ $pakan->jenis_pakan }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -559,7 +581,8 @@ c                                       us:ring-offset-2  mt-4 sm:mt-0 inline-fl
                                         <option value="">Pilih Subkriteria</option>
                                         @foreach ($kriteria->bobots as $bobot)
                                             <option value="{{ $bobot->bobot }}">{{ $bobot->nama_sub_kriteria }} -
-                                                {{ $bobot->bobot }}</option>
+                                                {{ $bobot->bobot }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -571,8 +594,7 @@ c                                       us:ring-offset-2  mt-4 sm:mt-0 inline-fl
 
                         <!--footer-->
                         <div
-                            class=
-                    "       flex items-center justify-end pt-3 border-t border-solid border-blueGray-200 rounded-b">
+                            class="       flex items-center justify-end pt-3 border-t border-solid border-blueGray-200 rounded-b">
 
                             <button
                                 class="text-gray-500 background-transparent font-bold  px-6 py-2 text-base outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -595,20 +617,17 @@ c                                       us:ring-offset-2  mt-4 sm:mt-0 inline-fl
     @if (sizeof($penilaians) > 2)
         <div class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center"
             id="modal-id2">
-            <div class="relative w-auto my-6 mx-auto max-w-3xl">
-                <!--
-                                c       ontent-->
+            <div class="relative w-auto my-6 mx-auto max-w-4xl">
+                <!-- content -->
                 <div
                     class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                    <!--header-->
+                    <!-- header -->
                     <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                         <h3 class="text-2xl font-semibold">
                             Ranking
                         </h3>
-
-
-                        <button c
-                            lass="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                        <button
+                            class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                             onclick="toggleModal2('modal-id2')">
                             <span
                                 class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
@@ -616,65 +635,103 @@ c                                       us:ring-offset-2  mt-4 sm:mt-0 inline-fl
                             </span>
                         </button>
                     </div>
-                    <!--body-->
+                    <!-- body -->
                     <div class="relative p-6 flex-auto">
                         <form action="{{ route('penilaian.store') }}" class="flex flex-col w-full gap-1" method="post">
                             @csrf
-                            <table class="display w-full example" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Alternatif Pakan</th>
-                                        <th>Nilai</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $i = 1;
-                                    @endphp
-
-                                    @foreach ($rankAlternatives as $kode_alternatif => $value)
-                                        <tr class="data-consume">
-                                            <td>{{ $i }}</td>
-                                            <td>
-                                                @foreach ($penilaians as $penilaian)
-                                                    @if ($penilaian['kode_alternatif'] == $kode_alternatif)
-                                                        {{ $penilaian['jenis_pakan'] }}
-                                                    @endif
-                                                @endforeach
-                                            </td>
-                                            <td>{{ $value }}</td>
-
+                            <div class="overflow-x-auto">
+                                <table class="display w-full example" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Alternatif Pakan</th>
+                                            <th>Serat</th>
+                                            <th>Lemak</th>
+                                            <th>Abu</th>
+                                            <th>Protein</th>
+                                            <th>Harga</th>
+                                            <th>Jarak</th>
+                                            <th>Ketersediaan</th>
+                                            <th>Nilai</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
                                         @php
-                                            $i++;
+                                            $i = 1;
                                         @endphp
-                                    @endforeach
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Alternatif Pakan</th>
-                                        <th>Nilai</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                            <!--footer-->
+                                        @foreach ($rankAlternatives as $kode_alternatif => $value)
+                                            @php
+                                                $penilaian = $penilaian_for_kedekatan_relatif->firstWhere(
+                                                    'kode_alternatif',
+                                                    $kode_alternatif,
+                                                );
+                                            @endphp
+                                            @if ($penilaian)
+                                                <tr class="data-consume">
+                                                    <td>{{ $i }}</td>
+                                                    <td>{{ $penilaian->jenis_pakan }}</td>
+                                                    <td>{{ $penilaian->serat }}</td>
+                                                    <td>{{ $penilaian->lemak }}</td>
+                                                    <td>{{ $penilaian->abu }}</td>
+                                                    <td>{{ $penilaian->protein }}</td>
+                                                    <td>{{ $penilaian->harga }}</td>
+                                                    <td>{{ $penilaian->jarak }}</td>
+                                                    <td>{{ $penilaian->ketersediaan }}</td>
+                                                    <td>{{ $value }}</td>
+                                                </tr>
+                                                @php
+                                                    $i++;
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Alternatif Pakan</th>
+                                            <th>Serat</th>
+                                            <th>Lemak</th>
+                                            <th>Abu</th>
+                                            <th>Protein</th>
+                                            <th>Harga</th>
+                                            <th>Jarak</th>
+                                            <th>Ketersediaan</th>
+                                            <th>Nilai</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <!-- footer -->
                             <div
-                                class="flex items-center justify-end pt-3 border-t borde
-                               r-solid border-blueGray-200 rounded-b">
+                                class="flex items-center justify-end pt-3 border-t border-solid border-blueGray-200 rounded-b">
                                 <button type="button" onclick="toggleModal2('modal-id2')"
-                                    class="focus:ring-2  mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-primary hover:bg-primary focus:outline-none rounded">
+                                    class="focus:ring-2 mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-primary hover:bg-primary focus:outline-none rounded">
                                     <p class="text-base font-semibold leading-none text-white">Close</p>
                                 </button>
                             </div>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
     @endif
+
+    <!-- Additional CSS (Tailwind CSS or your preferred framework) -->
+    <style>
+        /* Ensure the modal content covers the entire modal */
+        .modal-content {
+            max-width: 90vw;
+            overflow: hidden;
+        }
+
+        /* Ensure the table does not overflow the modal */
+        .table-container {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+    </style>
+
+
 
     <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-id-backdrop"></div>
     <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-id2-backdrop"></div>

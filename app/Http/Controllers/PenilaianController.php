@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bobot;
 use App\Models\Kriteria;
 use App\Models\Pakan;
 use App\Models\Penilaian;
 use App\Models\PenilaianUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class PenilaianController extends Controller
 {
     protected $weightCriteria = [
-        // bobot kriteria
         0.4,
         0.2,
         0.05,
@@ -72,15 +74,21 @@ class PenilaianController extends Controller
     }
 
     // Langkah 3 : Fungsi Menentukan Solusi Ideal Positif dan Negatif
-    function idealSolutions($weightedMatrix)
+    function idealSolutions($weightedMatrix, $criteriaTypes)
     {
         $idealPositive = [];
         $idealNegative = [];
 
         for ($j = 0; $j < count(current($weightedMatrix)); $j++) {
             $column = array_column($weightedMatrix, $j);
-            $idealPositive[$j] = max($column);
-            $idealNegative[$j] = min($column);
+
+            if ($criteriaTypes[$j] == 'Benefit') {
+                $idealPositive[$j] = max($column);
+                $idealNegative[$j] = min($column);
+            } elseif ($criteriaTypes[$j] == 'Cost') {
+                $idealPositive[$j] = min($column);
+                $idealNegative[$j] = max($column);
+            }
         }
 
         return [$idealPositive, $idealNegative];
@@ -158,12 +166,18 @@ class PenilaianController extends Controller
     public function index()
     {
         $penilaians = Penilaian::all();
+        $penilaian_for_kedekatan_relatif = DB::table('penilaians')
+            ->join('pakans', 'penilaians.kode_alternatif', '=', 'pakans.kode_alternatif')
+            ->select('penilaians.*', 'pakans.jenis_pakan', 'pakans.serat', 'pakans.lemak', 'pakans.abu', 'pakans.protein', 'pakans.harga', 'pakans.jarak', 'pakans.ketersediaan')
+            ->get();
+
         if (Penilaian::count() > 2) {
             $alternatives = $this->generateAlternatives($penilaians);
             $normalizedMatrix = $this->normalizeMatrix($alternatives);
             $weightedNormalizedMatrix = $this->weightedNormalizedMatrix($normalizedMatrix, $this->weightCriteria);
 
-            list($idealPositive, $idealNegative) = $this->idealSolutions($weightedNormalizedMatrix);
+            $criteriaTypes = Kriteria::pluck('keterangan')->toArray();
+            list($idealPositive, $idealNegative) = $this->idealSolutions($weightedNormalizedMatrix, $criteriaTypes);
 
             list($distancesPositive, $distancesNegative) = $this->calculateDistances($weightedNormalizedMatrix, $idealPositive, $idealNegative);
 
@@ -174,7 +188,7 @@ class PenilaianController extends Controller
 
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
-            return view('moduls.dashboard.penilaian', compact('penilaians', 'pakans', 'kriterias', 'alternatives', 'normalizedMatrix', 'weightedNormalizedMatrix', 'idealPositive', 'idealNegative', 'distancesPositive', 'distancesNegative', 'preferenceValues', 'rankAlternatives'));
+            return view('moduls.dashboard.penilaian', compact('penilaian_for_kedekatan_relatif', 'penilaians', 'pakans', 'kriterias', 'alternatives', 'normalizedMatrix', 'weightedNormalizedMatrix', 'idealPositive', 'idealNegative', 'distancesPositive', 'distancesNegative', 'preferenceValues', 'rankAlternatives'));
         } else {
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
@@ -204,26 +218,37 @@ class PenilaianController extends Controller
         $selectedPenilaianIds = $request->input('selected_penilaians', []);
         $selectedPenilaianUserIds = $request->input('selected_penilaian_users', []);
         // $penilaians = [];
-        //untuk penilaian dari admin ambil dari tabel Penilaian
         $penilaian_admins = Penilaian::whereIn('id', $selectedPenilaianIds)->get();
-        //looping untuk menambahkan object baru
         $penilaian_admins = $penilaian_admins->map(function ($item) {
-            //ditambahkan object penilaian_from
             $item->penilaian_from = 'admin';
+            $item->pakan = Pakan::where('kode_alternatif', $item->kode_alternatif)->first();
 
             return $item;
         });
-        //penilaian dari user ambil dari tabel penilaian user
         $penilaian_users = PenilaianUser::whereIn('id', $selectedPenilaianUserIds)->get();
-        //looping untuk menambahkan object baru
         $penilaian_users = $penilaian_users->map(function ($item) {
-            //tambahkan object penilaian_from
             $item->penilaian_from = 'user';
+            $explode = explode(', ', $item->bobot);
+            $serat = $explode[0];
+            $lemak = $explode[1];
+            $abu = $explode[2];
+            $protein = $explode[3];
+            $harga = $explode[4];
+            $jarak = $explode[5];
+            $ketersediaan = $explode[6];
+            $item->pakan = new stdClass;
+
+            $item->pakan->serat = Bobot::where('kode_kriteria', 'C1')->where('bobot', $serat)->first()->nama_sub_kriteria;
+            $item->pakan->lemak = Bobot::where('kode_kriteria', 'C2')->where('bobot', $lemak)->first()->nama_sub_kriteria;
+            $item->pakan->abu = Bobot::where('kode_kriteria', 'C3')->where('bobot', $abu)->first()->nama_sub_kriteria;
+            $item->pakan->protein = Bobot::where('kode_kriteria', 'C4')->where('bobot', $protein)->first()->nama_sub_kriteria;
+            $item->pakan->harga = Bobot::where('kode_kriteria', 'C5')->where('bobot', $harga)->first()->nama_sub_kriteria;
+            $item->pakan->jarak = Bobot::where('kode_kriteria', 'C6')->where('bobot', $jarak)->first()->nama_sub_kriteria;
+            $item->pakan->ketersediaan = Bobot::where('kode_kriteria', 'C7')->where('bobot', $ketersediaan)->first()->nama_sub_kriteria;
 
             return $item;
         });
 
-        //jadikan satu $penilaian_admins dengan $penilaian_users
         $penilaians = $penilaian_admins->merge($penilaian_users);
 
         if ($penilaians->count() > 1) {
@@ -232,7 +257,8 @@ class PenilaianController extends Controller
             $normalizedMatrix = $this->normalizeMatrix($alternatives);
             $weightedNormalizedMatrix = $this->weightedNormalizedMatrix($normalizedMatrix, $this->weightCriteria);
 
-            list($idealPositive, $idealNegative) = $this->idealSolutions($weightedNormalizedMatrix);
+            $criteriaTypes = Kriteria::pluck('keterangan')->toArray();
+            list($idealPositive, $idealNegative) = $this->idealSolutions($weightedNormalizedMatrix, $criteriaTypes);
 
             list($distancesPositive, $distancesNegative) = $this->calculateDistances($weightedNormalizedMatrix, $idealPositive, $idealNegative);
 
@@ -243,6 +269,7 @@ class PenilaianController extends Controller
 
             $pakans = Pakan::all();
             $kriterias = Kriteria::with('bobots')->get();
+            // dd($penilaians);
             return view('moduls.user.ranking', compact('penilaians', 'pakans', 'kriterias', 'alternatives', 'normalizedMatrix', 'weightedNormalizedMatrix', 'idealPositive', 'idealNegative', 'distancesPositive', 'distancesNegative', 'preferenceValues', 'rankAlternatives'));
         } else {
             $pakans = Pakan::all();
@@ -297,8 +324,7 @@ class PenilaianController extends Controller
     {
         $penilaian = Penilaian::findOrFail($id);
         $kriterias = Kriteria::all();
-        $pakans = Pakan::all();
-        return view('moduls.dashboard.penilaian_edit', compact('penilaian', 'kriterias', 'pakans'));
+        return view('moduls.dashboard.penilaian_edit', compact('penilaian', 'kriterias'));
     }
 
     /**
@@ -307,19 +333,8 @@ class PenilaianController extends Controller
     public function update(Request $request, $id)
     {
         $penilaian = Penilaian::findOrFail($id);
-
-        //ambil data dari inputan kode_alternatif
-        $kode_alternatif = $request->input('kode_alternatif');
-        //pisahkan koma (,)
-        $kode_alternatif = explode(',', $kode_alternatif);
-
-        //ambil index 0 sbg kode_alternatif
-        $penilaian->kode_alternatif = $kode_alternatif[0];
-        //ambil index 1 sbg jenis_pakan
-        $penilaian->jenis_pakan = $kode_alternatif[1];
-
-        $bobotArray = $request->input('kode_kriteria');
-        $penilaian->bobot = implode(', ', $bobotArray);
+        $penilaian->kode_alternatif = $request->input('kode_alternatif');
+        $penilaian->jenis_pakan = $request->input('jenis_pakan');
 
         $penilaian->save();
 

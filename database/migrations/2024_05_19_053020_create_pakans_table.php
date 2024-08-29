@@ -15,6 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('kode_alternatif')->unique();
             $table->string('jenis_pakan');
+            $table->float('serat');
+            $table->float('lemak');
+            $table->float('abu');
+            $table->float('protein');
+            $table->string('harga');
+            $table->string('jarak');
+            $table->string('ketersediaan');
             $table->timestamps();
         });
     }

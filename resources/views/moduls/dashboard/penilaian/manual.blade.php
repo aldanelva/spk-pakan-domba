@@ -61,7 +61,7 @@ e                           x-col gap-1">
 
                                     <p class="text-gray-400 max-w-2xl">&nbsp;</p>
                                     <!-- <p class="text-gray-400 max-w-2xl">Pakan
-                                                    Memilih pakan berkualitas berdasarkan kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik domba.</p> -->
+                                                                        Memilih pakan berkualitas berdasarkan kandungan nutrisi, ketersediaan, harga, kesehatan, keamanan, dan kebutuhan spesifik domba.</p> -->
                                     <div class="sm:flex items-center justify-start gap-2">
                                         <button onclick="toggleModal('modal-id')" type="button"
                                             class="focus:ring-2 focus:ring-offset-2  mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-1 bg-primary hover:bg-primary focus:outline-none rounded">
@@ -579,7 +579,7 @@ e                           x-col gap-1">
                     </button>
                 </div>
                 <!--body-->
-                <div class="relative p-6 flex-auto">
+                {{-- <div class="relative p-6 flex-auto">
                     <form action="{{ route('penilaian.user.update', ['id' => $penilaian->id]) }}"
                         class="flex flex-col w-full gap-1" method="post">
                         @csrf
@@ -612,7 +612,7 @@ e                           x-col gap-1">
                             </button>
                         </div>
                     </form>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -661,19 +661,24 @@ e                           x-col gap-1">
                         </div>
 
                         <div class="grid grid-cols-2 gap-1">
-                            @foreach ($kriterias as $kriteria)
+                            @foreach ($kriterias as $key => $kriteria)
                                 <div class="mb-1 pt-0 w-full">
                                     <label for=""
                                         class="text-blueGray-600 text-base font-medium">{{ $kriteria->nama_kriteria }}</label>
-                                    <select name="kode_kriteria[]" id=""
-                                        class="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring w-full">
-                                        <option value="">Pilih Subkriteria</option>
-                                        @foreach ($kriteria->bobots as $bobot)
-                                            <option value="{{ $bobot->bobot }}">{{ $bobot->nama_sub_kriteria }} -
-                                                {{ $bobot->bobot }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    @if ($key == 10000)
+                                        <input name="kode_kriteria[]" id=""
+                                            class="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring w-full">
+                                    @else
+                                        <select name="kode_kriteria[]" id=""
+                                            class="px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-base border-0 shadow outline-none focus:outline-none focus:ring w-full">
+                                            <option value="">Pilih Subkriteria</option>
+                                            @foreach ($kriteria->bobots as $bobot)
+                                                <option value="{{ $bobot->bobot }}">{{ $bobot->nama_sub_kriteria }} -
+                                                    {{ $bobot->bobot }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>

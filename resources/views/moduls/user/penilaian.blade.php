@@ -64,7 +64,7 @@ e                           x-col gap-1">
                         <div class="w-full flex flex-col gap-3 mb-1">
                             <div class="flex gap-2 w-full items-center">
                                 <i class='bx bxs-select-multiple text-3xl text-primary'></i>
-                                <h2 class="text-left text-2xl text-primary tracking-[-2px] font-bold">Penilaian Admin
+                                <h2 class="text-left text-2xl text-primary tracking-[-2px] font-bold">Penilaian User
                                 </h2>
                             </div>
                             @if (sizeof($penilaians) == 0)
@@ -103,35 +103,7 @@ e                           x-col gap-1">
                                 {{-- </form> --}}
                             @endif
 
-
-
-                        </div>
-
-
-                    </div>
-
-
-                    {{-- @endif --}}
-
-                    {{-- @if (sizeof($penilaians) > 2) --}}
-
-                    <div class="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10 mr-16 w-full max-w-full min-w-full">
-                        <div class="w-full flex flex-col gap-3 mb-10">
-                            <div class="flex gap-2 w-full items-center">
-                                <i class='bx bxs-select-multiple text-3xl text-primary'></i>
-                                <h2 class="text-left text-2xl text-primary tracking-[-2px] font-bold">Penilaian User
-                                </h2>
-                            </div>
                             @if (sizeof($penilaian_users) == 0)
-                                <div
-                                    class="w-full text-gray-500 flex flex-col items-center justify-center max-w-md text-center mx-auto mt-10">
-
-                                    <img src="https://static.vecteezy.com/system/resources/previews/034/795/880/original/ai-generated-cute-sheep-cartoon-image-free-png.png"
-                                        alt="" class="w-48">
-                                    <h3 class="text-primary font-bold text-5xl mt-2">Oops!</h3>
-
-                                    <p>Data Penilaian Kosong! Silahkan tambah data penilaian</p>
-                                </div>
                             @else
                                 {{-- <form action="{{ route('generateRanking') }}" method="POST"
                                     onsubmit="return validateForm()"> --}}
@@ -147,18 +119,18 @@ e                           x-col gap-1">
                                         </div>
                                     @endforeach
                                 </div>
-                                <div class="sm:flex items
-                                   -center justify-start gap-2">
-                                    <button type="submit"
-                                        class="focus:ring-2 focus:ring-offset-2 mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-1 bg-primary hover:bg-primary focus:outline-none rounded">
-                                        <p class="font-semibold leading-none text-white flex items-center gap-1">
-                                            <i class='bx bxs-bar-chart-alt-2 text-lg'></i>
-                                            <span>Generate Ranking</span>
-                                        </p>
-                                    </button>
-                                </div>
                                 {{-- </form> --}}
                             @endif
+                            <div class="sm:flex items
+                                   -center justify-start gap-2">
+                                <button type="submit"
+                                    class="focus:ring-2 focus:ring-offset-2 mt-4 sm:mt-0 inline-flex items-start justify-start px-6 py-1 bg-primary hover:bg-primary focus:outline-none rounded">
+                                    <p class="font-semibold leading-none text-white flex items-center gap-1">
+                                        <i class='bx bxs-bar-chart-alt-2 text-lg'></i>
+                                        <span>Generate Ranking</span>
+                                    </p>
+                                </button>
+                            </div>
 
 
 
@@ -166,6 +138,13 @@ e                           x-col gap-1">
 
 
                     </div>
+
+
+                    {{-- @endif --}}
+
+                    {{-- @if (sizeof($penilaians) > 2) --}}
+
+
                 </form>
 
 
